@@ -1,0 +1,315 @@
+openapi: 3.0.3
+info:
+  title: Swagger Spese Manager - OpenAPI 3.0
+  description: |-
+    This is a sample Spese Manager based on the OpenAPI 3.0 specification.  You can find out more about Swagger at [https://swagger.io](https://swagger.io). In this iteration of the RESTfull SpeseService, we're trying to follow the design first approach!
+    Help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+
+    _If you're looking for the Swagger 2.0/OAS 2.0 version of SpeseManager, then click [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml). Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu option!_
+    
+    Some useful links:
+    - [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)
+    - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: alessandrobrillante78@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080/ServizioRESTfullSpese-1.0-SNAPSHOT/apispese/
+tags:
+  - name: Spesa
+    description: Tutto riguardo le tue spese
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: Utente
+    description: Operazioni sugli utenti
+    externalDocs:
+      description: Find out more 
+      url: http://swagger.io
+paths:
+  /spese:
+  
+    get:
+      tags:
+        - Spesa
+      summary: Ottieni le tutte le spese esistenti
+      description: Ottieni tutte le spese esistenti
+      operationId: elencoSpese
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Spesa'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Spesa'
+        '404':
+          description: Spese non trovate
+        '500':
+          description: Internal Server Error
+  
+    put:
+      tags:
+        - Spesa
+      summary: Update di una spesa esistente
+      description: Update di una spesa esistente dato l'Id
+      operationId: aggiornaSpesa
+      requestBody:
+        description: Update di una spesa esistente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Spesa'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Spesa'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Spesa'
+        required: true
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Spesa'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Spesa'
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Spesa non trovata
+        '405':
+          description: Errore di validazione
+      security:
+        - spesemanager_auth:
+            - write:spese
+            - read:spese
+    post:
+      tags:
+        - Spesa
+      summary: Aggiungi una nuova spesa al manager
+      description: Aggiungi una nuova spesa al manager
+      operationId: creaSpesa
+      requestBody:
+        description: Crea una nuova spesa nel manager
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Spesa'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Spesa'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Spesa'
+        required: true
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Spesa'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Spesa'
+        '405':
+          description: Input non valido
+      security:
+        - spesemanager_auth:
+            - write:spese
+            - read:spese
+            
+  /spese/{id}:
+    get:
+      tags:
+        - Spesa
+      summary: Trova Spesa dall'ID (hashed))
+      description: Ritorna una singola Spesa
+      operationId: getSpesa
+      parameters:
+        - name: id
+          in: path
+          description: ID della spesa da ritornare
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Spesa'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Spesa'
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Spesa non trovata
+      security:
+        - api_key: []
+        - spesemanager_auth:
+            - write:spese
+            - read:spese
+    delete:
+      tags:
+        - Spesa
+      summary: Cancella una spesa
+      description: cancella una spesa dato l'id
+      operationId: cancellaSpesa
+      parameters:
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: ID della spesa da eliminare
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: ID fornito non valido
+      security:
+        - spesemanager_auth:
+            - write:spese
+            - read:spese
+  /utente:
+    post:
+      tags:
+        - Utente
+      summary: Crea utente
+      description: This can only be done by the logged in user.
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Utente'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Utente'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Utente'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Utente'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Utente'
+                
+components:
+  schemas:
+
+    Utente:
+      type: object
+      properties:
+        idUtente:
+          type: integer
+          format: int64
+          example: 10
+        email:
+          type: string
+          example: alessandrobrillante@gmail.com
+        password:
+          type: string
+          example: '12345'
+      xml:
+        name: utente
+    Spesa:
+      required:
+        - giorno
+        - importo
+      type: object
+      properties:
+        idSpesa:
+          type: integer
+          format: int64
+          example: 10
+        giorno:
+          type: date
+          example: '2023-12-19T10:45:21'
+        tipo:
+          type: string
+          example: 'CIBO'
+        luogo:
+          type: string
+          example: 'Torino'
+        importo:
+          type: number
+          example: 10.55
+        note:
+          type: string
+          example: 'Farmacia del Cambio'
+          
+      xml:
+        name: spesa
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Spesa:
+      description: oggetto Spesa da aggiungere al registro
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Spesa'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Spesa'
+    UtentiArray:
+      description: Lista degli oggetti Utente
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Utente'
+  securitySchemes:
+    spesemanager_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:spese: modifica le spese nel tuo account
+            read:spese: leggi le tue spese
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
