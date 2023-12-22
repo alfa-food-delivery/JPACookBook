@@ -1,7 +1,7 @@
 
-_
-/src/main/java/it/alfasoft/jpacookbook/Main.java,a\1\a10d35fbb0f2e6eadb210afdbdba87d5cc68062c
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 f
 6src/main/java/it/alfasoft/jpacookbook/JPACookbook.java,1\1\1194e2b4b83a503d89d27404c23a976e4fbba670
+[
++src/main/resources/META-INF/persistence.xml,3\b\3be4f79b5828b3982f3f6a62bf8fc67b3adedf58
